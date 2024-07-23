@@ -1,8 +1,17 @@
+"use client";
+
+import { useState } from "react";
 import NoteCard from "./component/card/NoteCard";
+import AddNoteForm from "./component/form/AddNoteForm";
+import Modal from "./component/modal/Modal";
 import CategoryBar from "./component/sort/CategoryBar";
 import NoteContextProvider from "./context/NoteContext";
+import UpdateNoteForm from "./component/form/UpdateNoteForm";
 
 export default function Home() {
+  const [isAddNoteOpen, setIsAddNoteOpen] = useState<boolean>(false);
+  const [isEditNoteOpen, setIsEditNoteOpen] = useState<boolean>(false);
+
   return (
     <NoteContextProvider>
       <div className="container h-screen mx-auto pt-8">
@@ -25,23 +34,35 @@ export default function Home() {
             createdBy="John Doe"
             date={new Date()}
             category="Category"
+            onEditClick={() => setIsEditNoteOpen(true)}
           />
           <NoteCard
             content="this is content of the note"
             createdBy="John Doe"
             date={new Date()}
             category="Category"
+            onEditClick={() => setIsEditNoteOpen(true)}
           />
         </div>
-        <input
-          type="text"
-          placeholder="Take a note..."
-          className="flex-1 bg-gray-200 placeholder:text-gray-500 rounded-full outline-none px-4 py-3"
-        />
       </div>
-      <button className="absolute bottom-6 right-6 bg-white text-3xl font-medium rounded-full px-4 pt-[6px] pb-[10px]">
+      <button
+        onClick={() => setIsAddNoteOpen(true)}
+        className="absolute bottom-6 right-6 bg-white text-3xl font-medium rounded-full px-4 pt-[6px] pb-[10px]"
+      >
         +
       </button>
+      <Modal isOpen={isAddNoteOpen} onClose={() => setIsAddNoteOpen(false)}>
+        <AddNoteForm />
+      </Modal>
+
+      <Modal
+        isOpen={isEditNoteOpen}
+        onClose={() => {
+          setIsEditNoteOpen(false);
+        }}
+      >
+        <UpdateNoteForm />
+      </Modal>
     </NoteContextProvider>
   );
 }

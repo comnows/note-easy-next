@@ -6,9 +6,18 @@ type NoteCardProps = {
   createdBy: string;
   date: Date;
   category: string;
+  onEditClick?: () => void;
+  canEdit?: boolean;
 };
 
-function NoteCard({ content, createdBy, date, category }: NoteCardProps) {
+function NoteCard({
+  content,
+  createdBy,
+  date,
+  category,
+  onEditClick,
+  canEdit = true,
+}: NoteCardProps) {
   return (
     <div className="flex flex-col justify-between gap-2 bg-white border rounded-lg p-4 shadow-lg">
       <div className="flex flex-col gap-2">
@@ -18,14 +27,16 @@ function NoteCard({ content, createdBy, date, category }: NoteCardProps) {
               {category}
             </div>
           </div>
-          <div className="flex gap-2">
-            <button className="hover:text-blue-600">
-              <FaPen />
-            </button>
-            <button className="hover:text-red-600">
-              <FaTrashCan />
-            </button>
-          </div>
+          {canEdit && (
+            <div className="flex gap-2">
+              <button onClick={onEditClick} className="hover:text-blue-600">
+                <FaPen />
+              </button>
+              <button className="hover:text-red-600">
+                <FaTrashCan />
+              </button>
+            </div>
+          )}
         </div>
         <p className="font-medium">{content}</p>
       </div>
