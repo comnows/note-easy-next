@@ -4,7 +4,7 @@ import Link from "next/link";
 function Login() {
   return (
     <div className="h-screen flex justify-center items-center">
-      <form className="flex-1 flex flex-col items-center max-w-2xl rounded-xl shadow-xl p-8 m-8">
+      <form className="flex-1 flex flex-col items-center bg-white max-w-2xl rounded-xl shadow-xl p-8 m-8">
         <h1 className="text-3xl font-semibold">Login</h1>
         <div className="w-full flex flex-col mt-4">
           <FormInput name="email" label="Email" type="email" />
