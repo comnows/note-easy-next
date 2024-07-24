@@ -1,17 +1,49 @@
 "use client";
 
+import { useAuthContext } from "@/app/hook/UseAuthContext";
 import { useNoteContext } from "@/app/hook/UseNoteContext";
+import { db } from "@/app/lib/firebase";
+import { addDoc, collection } from "firebase/firestore";
 
-function AddNoteForm() {
+type AddNoteFormProps = {
+  onClose: () => void;
+};
+
+function AddNoteForm({ onClose }: AddNoteFormProps) {
   const { noteCategories } = useNoteContext();
+  const { currentUser } = useAuthContext();
+
+  const handleAddNote = async (e: React.FormEvent<HTMLFormElement>) => {
+    const formData = new FormData(e.currentTarget);
+    const note = formData.get("note") as string;
+    const category = formData.get("categories") as string;
+
+    const newNote = {
+      createdBy: currentUser?.displayName,
+      note: note,
+      category: category,
+      createdAt: new Date(),
+    };
+
+    try {
+      const colRef = collection(db, "note");
+      await addDoc(colRef, newNote);
+      onClose();
+      console.log("Successfully added note");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="relative">
-      <form className="flex flex-col gap-3">
+      <form onSubmit={handleAddNote} className="flex flex-col gap-3">
         <label htmlFor="note-textarea" className="font-semibold">
           Edit note
         </label>
         <textarea
-          name=""
+          required
+          name="note"
           id="note-textarea"
           cols={50}
           rows={10}
@@ -22,7 +54,7 @@ function AddNoteForm() {
           Categories
         </label>
         <select
-          name=""
+          name="categories"
           id="categories"
           className="bg-slate-100 rounded-full outline-none px-2 py-1"
         >

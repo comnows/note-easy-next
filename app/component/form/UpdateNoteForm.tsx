@@ -1,7 +1,11 @@
+import { useNoteContext } from "@/app/hook/UseNoteContext";
+import { useAuthContext } from "@/app/hook/UseAuthContext";
 import NoteCard from "../card/NoteCard";
 import AddNoteForm from "./AddNoteForm";
 
 function UpdateNoteForm() {
+  const { setIsEditNoteOpen } = useNoteContext();
+
   return (
     <div className="flex gap-8">
       <div className="max-w-xs">
@@ -37,7 +41,7 @@ function UpdateNoteForm() {
           />
         </div>
       </div>
-      <AddNoteForm />
+      <AddNoteForm onClose={() => setIsEditNoteOpen(false)} />
     </div>
   );
 }
