@@ -3,7 +3,7 @@
 import FormInput from "@/app/(auth)/FormInput";
 import ProtectedAuthRoute from "@/app/component/auth/ProtectedAuthRoute";
 import { auth } from "@/app/lib/firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent } from "react";
@@ -15,6 +15,7 @@ function Register() {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
+    const username = formData.get("username") as string;
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
     const confirmPassword = formData.get("confirm-password") as string;
@@ -25,7 +26,12 @@ function Register() {
     }
 
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
+      await updateProfile(userCredential.user, { displayName: username });
       router.push("/");
     } catch (error) {
       console.log(error);
@@ -40,6 +46,9 @@ function Register() {
           className="flex-1 flex flex-col items-center bg-white max-w-2xl rounded-xl shadow-xl p-8 m-8"
         >
           <h1 className="text-3xl font-semibold">Register</h1>
+          <div className="w-full flex flex-col mt-4">
+            <FormInput name="username" label="Username" type="text" />
+          </div>
           <div className="w-full flex flex-col mt-4">
             <FormInput name="email" label="Email" type="email" />
           </div>
