@@ -5,11 +5,9 @@ import ProtectedAuthRoute from "@/app/component/auth/ProtectedAuthRoute";
 import { auth } from "@/app/lib/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { FormEvent } from "react";
 
 function Login() {
-  const router = useRouter();
   const handleSignin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -19,7 +17,6 @@ function Login() {
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      router.push("/");
     } catch (error) {
       console.log(error);
     }
