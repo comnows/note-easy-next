@@ -8,6 +8,7 @@ import AddNoteButton from "./component/button/AddNoteButton";
 import AddNoteModal from "./component/modal/AddNoteModal";
 import UpdateNoteModal from "./component/modal/UpdateNoteModal";
 import NoteList from "./component/note/NoteList";
+import SortSelect from "./component/sort/SortSelect";
 
 export default function Home() {
   return (
@@ -18,10 +19,7 @@ export default function Home() {
 
           <div className="flex justify-between mt-5">
             <CategoryBar />
-            <select name="" id="" className="outline-none rounded-full px-2">
-              <option value="">Newest</option>
-              <option value="">Oldest</option>
-            </select>
+            <SortSelect />
           </div>
 
           <NoteList />

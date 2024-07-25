@@ -7,13 +7,15 @@ import { addDoc, collection } from "firebase/firestore";
 
 type AddNoteFormProps = {
   onClose: () => void;
+  onSubmit?: (e: React.FormEvent<HTMLFormElement>) => {};
 };
 
-function AddNoteForm({ onClose }: AddNoteFormProps) {
+function AddNoteForm({ onClose, onSubmit }: AddNoteFormProps) {
   const { noteCategories } = useNoteContext();
   const { currentUser } = useAuthContext();
 
   const handleAddNote = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const note = formData.get("note") as string;
     const category = formData.get("categories") as string;
@@ -29,7 +31,6 @@ function AddNoteForm({ onClose }: AddNoteFormProps) {
       const colRef = collection(db, "note");
       await addDoc(colRef, newNote);
       onClose();
-      console.log("Successfully added note");
     } catch (error) {
       console.log(error);
     }
@@ -37,7 +38,10 @@ function AddNoteForm({ onClose }: AddNoteFormProps) {
 
   return (
     <div className="relative">
-      <form onSubmit={handleAddNote} className="flex flex-col gap-3">
+      <form
+        onSubmit={onSubmit ? onSubmit : handleAddNote}
+        className="flex flex-col gap-3"
+      >
         <label htmlFor="note-textarea" className="font-semibold">
           Edit note
         </label>
